@@ -19,6 +19,14 @@ namespace ClothBazar.Services
             }
         }
 
+        public List<Product> GetProducts(List<int> IDs)
+        {
+            using (var context = new AppDbContext())
+            {
+                return context.Products.Where(x => IDs.Contains(x.ID)).ToList();
+            }
+        }
+
         public List<Product> GetProducts()
         {
             //var context = new AppDbContext();

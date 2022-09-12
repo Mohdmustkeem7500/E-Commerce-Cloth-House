@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿
+@{ 
+    ConfigurationsService configurationsService = new ConfigurationsService();
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <!--Old Code-->
@@ -45,9 +50,9 @@
 </head>
 <body class="header_sticky header-style-1 has-menu-extra">
     <!-- Preloader -->
-    <div  id="loading-overlay">
-            <div class="loader"></div>
-        </div>
+    <div id="loading-overlay">
+        <div class="loader"></div>
+    </div>
 
     <!-- Boxed -->
     <div class="boxed">
@@ -91,7 +96,7 @@
                         <nav id="mainnav" class="mainnav">
                             <ul class="menu">
                                 <li class="active">
-                                    <a href="index.html">HOME</a>
+                                    <a href="~/Home/Index">HOME</a>
                                     <ul class="submenu">
                                         <li class="active"><a href="index.html">Homepage Style 1</a></li>
                                         <li><a href="index-v2.html">Homepage Style 2</a></li>
@@ -186,8 +191,8 @@
                                     </div>
                                 </div>
                             </form>
-                            <ul class="flat-social">
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <ul class="flat-social">     
+                                <li><a href="@configurationsService.GetConfig("FacebookURL").Value"><i class="fa fa-facebook"></i></a></li>
                                 <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                                 <li><a href="#"><i class="fa fa-google"></i></a></li>
                                 <li><a href="#"><i class="fa fa-behance"></i></a></li>
@@ -238,8 +243,8 @@
                                 <a href="index.html"><img src="~/Content/images/logo@2x.png" alt="image" width="107" height="24"></a>
                             </div>
                             <ul class="flat-contact">
-                                <li class="address">112 Kingdom, NA 12, New York</li>
-                                <li class="phone">+12 345 678 910</li>
+                                <li class="address">@configurationsService.GetConfig("CompanyAddress").Value</li>
+                                <li class="phone">@configurationsService.GetConfig("CompanyPhone").Value</li>
                                 <li class="email">infor.deercreative@gmail.com</li>
                             </ul><!-- /.flat-contact -->
                         </div><!-- /.widget -->
@@ -301,6 +306,8 @@
     <script src="~/Content/rev-slider/js/extensions/revolution.extension.parallax.min.js"></script>
     <script src="~/Content/rev-slider/js/extensions/revolution.extension.slideanims.min.js"></script>
     <script src="~/Content/rev-slider/js/extensions/revolution.extension.video.min.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!--Old Code-->
     @*<div class="navbar navbar-inverse navbar-fixed-top">
