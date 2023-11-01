@@ -11,18 +11,20 @@ namespace ClothBazar.App.Controllers
 {
     public class ProductController : Controller
     {
-        ProductsService productsService = new ProductsService();
+        //ProductsService productsService = new ProductsService();
         CategoriesService categoriesService = new CategoriesService();
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult Products(string search)
+        public ActionResult Products(string search, int? pageNo)
         {
+            pageNo = pageNo.HasValue ? pageNo : 1;
+
             ProductSearchViewModel productSearchViewModel = new ProductSearchViewModel();
 
-            productSearchViewModel.Products = productsService.GetProducts();
+            productSearchViewModel.Products = ProductsService.Instance.GetProducts(pageNo.Value);
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -31,11 +33,11 @@ namespace ClothBazar.App.Controllers
                 productSearchViewModel.Products = productSearchViewModel.Products.Where(p => p.Name != null && p.Name.ToLower().Contains(search.ToLower())).ToList();
             }
 
-            return PartialView(productSearchViewModel);
+            return PartialView(productSearchViewModel); 
         }
 
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create() 
         {
             NewProductViewModel newProductViewModel = new NewProductViewModel();
 
@@ -56,7 +58,7 @@ namespace ClothBazar.App.Controllers
             //newProduct.CategoryID = newCategoryViewModel.CategoryID;
             newProduct.Category = categoriesService.GetCategory(newProductViewModel.CategoryID);
 
-            productsService.SaveProduct(newProduct);
+            ProductsService.Instance.SaveProduct(newProduct);
 
             return RedirectToAction("Products");
         }
@@ -66,7 +68,7 @@ namespace ClothBazar.App.Controllers
         {
             EditProductViewModel editProductViewModel = new EditProductViewModel();
 
-            var product = productsService.GetProduct(ID);
+            var product = ProductsService.Instance.GetProduct(ID);
 
             editProductViewModel.ID = product.ID;
             editProductViewModel.Name = product.Name;
@@ -84,13 +86,13 @@ namespace ClothBazar.App.Controllers
         [HttpPost]
         public ActionResult Edit(EditProductViewModel editProductViewModel)
         {
-            var existingProduct = productsService.GetProduct(editProductViewModel.ID);
+            var existingProduct = ProductsService.Instance.GetProduct(editProductViewModel.ID);
             existingProduct.Name = editProductViewModel.Name;
             existingProduct.Description = editProductViewModel.Description;
             existingProduct.Price = editProductViewModel.Price;
             existingProduct.Category = categoriesService.GetCategory(editProductViewModel.CategoryID);
 
-            productsService.UpdateProduct(existingProduct);
+            ProductsService.Instance.UpdateProduct(existingProduct);
 
             return RedirectToAction("Products");
         }
@@ -98,7 +100,7 @@ namespace ClothBazar.App.Controllers
         [HttpPost]
         public ActionResult Delete(int ID)
         {
-            productsService.DeleteProduct(ID);
+            ProductsService.Instance.DeleteProduct(ID);
 
             return RedirectToAction("Products");
         }
